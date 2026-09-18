@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema de Calificación - FEYRI Tiene Talento</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-slate-100 min-h-screen text-slate-800 font-sans">
+
+  <!-- ENCABEZADO -->
+  <header class="bg-indigo-900 text-white shadow-md">
+    <div class="max-w-5xl mx-auto px-4 py-4 flex justify-between items-center">
+      <div>
+        <h1 class="text-xl font-bold tracking-wide">FEYRI TIENE TALENTO</h1>
+        <p class="text-xs text-indigo-200">Panel Oficial de Evaluación de Jurado</p>
+      </div>
+      <div id="userBadge" class="hidden flex items-center gap-3">
+        <span id="judgeNameDisplay" class="bg-indigo-800 text-xs px-3 py-1.5 rounded-full border border-indigo-700 font-semibold"></span>
+        <button onclick="logout()" class="text-xs bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded-lg transition">Salir</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-5xl mx-auto px-4 py-6">
+
+    <!-- 1. PANTALLA DE LOGIN -->
+    <section id="loginSection" class="max-w-md mx-auto mt-12 bg-white p-8 rounded-2xl shadow-lg border border-slate-200">
+      <div class="text-center mb-6">
+        <div class="inline-flex p-3 bg-indigo-100 text-indigo-700 rounded-full mb-3 text-2xl">
+          <i class="fas fa-gavel"></i>
+        </div>
+        <h2 class="text-xl font-bold text-slate-900">Acceso de Jueces</h2>
+        <p class="text-xs text-slate-500 mt-1">Ingresa tus credenciales asignadas</p>
+      </div>
+      <div class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold uppercase text-slate-600 mb-1">Usuario</label>
+          <input type="text" id="username" placeholder="Ej: juez1" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold uppercase text-slate-600 mb-1">Contraseña</label>
+          <input type="password" id="password" placeholder="••••••••" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
+        </div>
+        <button onclick="login()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 rounded-lg shadow transition text-sm">
+          Iniciar Sesión
+        </button>
+        <div id="loginError" class="hidden text-xs text-red-600 bg-red-50 p-2.5 rounded border border-red-200 text-center"></div>
+      </div>
+      <div class="mt-6 pt-4 border-t border-slate-100 text-[11px] text-slate-400 text-center">
+        Cuentas: <b>juez1</b>, <b>juez2</b>, <b>juez3</b> (Clave: <i>talento2026</i>) | Admin: <b>admin</b> (Clave: <i>admin2026</i>)
+      </div>
+    </section>
+
+    <!-- 2. PANEL DEL JUEZ -->
+    <section id="evalSection" class="hidden space-y-6">
+
+      <!-- Barra de Configuración: Categoría y Participante -->
+      <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Categoría</label>
+          <select id="categorySelect" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-sm font-medium focus:ring-2 focus:ring-indigo-500">
+            <option value="Canto 1">Categoría: Canto 1</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Seleccionar Participante</label>
+          <select id="participantSelect" onchange="loadParticipantScore()" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-sm font-semibold text-indigo-900 focus:ring-2 focus:ring-indigo-500">
+            <!-- Se llena dinámicamente -->
+          </select>
+        </div>
+      </div>
+
+      <!-- Tarjeta del Participante Activo -->
+      <div class="bg-gradient-to-r from-indigo-700 to-blue-600 text-white p-5 rounded-xl shadow flex flex-col sm:flex-row justify-between sm:items-center gap-3">
+        <div>
+          <span class="text-xs uppercase tracking-wider bg-white/20 px-2 py-0.5 rounded font-semibold">En Escenario</span>
+          <h3 id="currentParticipantName" class="text-xl font-bold mt-1"></h3>
+          <p id="currentParticipantSong" class="text-sm text-indigo-100 flex items-center gap-2 mt-0.5">
+            <i class="fas fa-music"></i> <span></span>
+          </p>
+        </div>
+        <div class="text-right bg-white/10 p-3 rounded-lg border border-white/10 self-start sm:self-auto">
+          <div class="text-xs uppercase text-indigo-200">Total Acumulado</div>
+          <div id="liveTotal" class="text-3xl font-extrabold text-amber-300">0 <span class="text-sm font-normal text-white">/ 100</span></div>
+        </div>
+      </div>
+
+      <!-- Formulario de Rúbrica -->
+      <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 space-y-6">
+
+        <!-- Criterio 1: Afinación (40 pts) -->
+        <div class="border-b border-slate-100 pb-5">
+          <div class="flex justify-between items-center mb-1">
+            <h4 class="font-bold text-slate-800 text-sm md:text-base">1. Afinación (Máx. 40 Pts)</h4>
+            <span id="scoreAfinacionBadge" class="text-sm font-extrabold px-3 py-1 bg-indigo-50 text-indigo-700 rounded-full border border-indigo-200">0 pts</span>
+          </div>
+          <p class="text-xs text-slate-500 mb-3">
+            <b>36-40:</b> Excelente | <b>31-35:</b> Buena | <b>21-30:</b> Aceptable | <b>11-20:</b> Inconsistente | <b>0-10:</b> Pobre
+          </p>
+          <div class="flex items-center gap-4">
+            <input type="range" id="inputAfinacion" min="0" max="40" value="0" oninput="updateRubricTotals()" class="w-full accent-indigo-600 cursor-pointer">
+            <input type="number" id="numAfinacion" min="0" max="40" value="0" oninput="syncFromNumber('inputAfinacion', this.value)" class="w-16 text-center border border-slate-300 rounded p-1 text-sm font-semibold">
+          </div>
+        </div>
+
+        <!-- Criterio 2: Técnica Vocal (30 pts) -->
+        <div class="border-b border-slate-100 pb-5">
+          <div class="flex justify-between items-center mb-1">
+            <h4 class="font-bold text-slate-800 text-sm md:text-base">2. Técnica Vocal (Máx. 30 Pts)</h4>
+            <span id="scoreTecnicaBadge" class="text-sm font-extrabold px-3 py-1 bg-indigo-50 text-indigo-700 rounded-full border border-indigo-200">0 pts</span>
+          </div>
+          <p class="text-xs text-slate-500 mb-3">
+            <b>26-30:</b> Excelente | <b>21-25:</b> Buena | <b>11-20:</b> Aceptable | <b>0-10:</b> Deficiente
+          </p>
+          <div class="flex items-center gap-4">
+            <input type="range" id="inputTecnica" min="0" max="30" value="0" oninput="updateRubricTotals()" class="w-full accent-indigo-600 cursor-pointer">
+            <input type="number" id="numTecnica" min="0" max="30" value="0" oninput="syncFromNumber('inputTecnica', this.value)" class="w-16 text-center border border-slate-300 rounded p-1 text-sm font-semibold">
+          </div>
+        </div>
+
+        <!-- Criterio 3: Interpretación y Presencia Escénica (20 pts) -->
+        <div class="border-b border-slate-100 pb-5">
+          <div class="flex justify-between items-center mb-1">
+            <h4 class="font-bold text-slate-800 text-sm md:text-base">3. Interpretación y Presencia Escénica (Máx. 20 Pts)</h4>
+            <span id="scoreInterpBadge" class="text-sm font-extrabold px-3 py-1 bg-indigo-50 text-indigo-700 rounded-full border border-indigo-200">0 pts</span>
+          </div>
+          <p class="text-xs text-slate-500 mb-3">
+            <b>16-20:</b> Emocional y convincente | <b>11-15:</b> Adecuada | <b>6-10:</b> Aceptable | <b>0-5:</b> Débil
+          </p>
+          <div class="flex items-center gap-4">
+            <input type="range" id="inputInterp" min="0" max="20" value="0" oninput="updateRubricTotals()" class="w-full accent-indigo-600 cursor-pointer">
+            <input type="number" id="numInterp" min="0" max="20" value="0" oninput="syncFromNumber('inputInterp', this.value)" class="w-16 text-center border border-slate-300 rounded p-1 text-sm font-semibold">
+          </div>
+        </div>
+
+        <!-- Criterio 4: Originalidad (10 pts) -->
+        <div>
+          <div class="flex justify-between items-center mb-1">
+            <h4 class="font-bold text-slate-800 text-sm md:text-base">4. Originalidad (Máx. 10 Pts)</h4>
+            <span id="scoreOriginalidadBadge" class="text-sm font-extrabold px-3 py-1 bg-indigo-50 text-indigo-700 rounded-full border border-indigo-200">0 pts</span>
+          </div>
+          <p class="text-xs text-slate-500 mb-3">
+            <b>8-10:</b> Original y única | <b>5-7:</b> Aspectos innovadores | <b>0-4:</b> Predecible
+          </p>
+          <div class="flex items-center gap-4">
+            <input type="range" id="inputOriginalidad" min="0" max="10" value="0" oninput="updateRubricTotals()" class="w-full accent-indigo-600 cursor-pointer">
+            <input type="number" id="numOriginalidad" min="0" max="10" value="0" oninput="syncFromNumber('inputOriginalidad', this.value)" class="w-16 text-center border border-slate-300 rounded p-1 text-sm font-semibold">
+          </div>
+        </div>
+
+        <!-- Retroalimentación / Notas -->
+        <div class="pt-2">
+          <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Observaciones / Comentarios</label>
+          <textarea id="feedbackText" rows="2" placeholder="Opcional: Comentarios para el participante..." class="w-full p-2.5 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500"></textarea>
+        </div>
+
+        <!-- Botón Guardar -->
+        <div class="pt-2 flex gap-3">
+          <button onclick="saveCurrentScore()" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-lg shadow-md transition flex justify-center items-center gap-2">
+            <i class="fas fa-check-circle"></i> Guardar Calificación
+          </button>
+        </div>
+        <div id="saveConfirmMsg" class="hidden text-center text-xs font-semibold text-emerald-700 bg-emerald-50 p-2 rounded border border-emerald-200">
+          ¡Calificación guardada con éxito!
+        </div>
+      </div>
+
+      <!-- Barra de navegación a resultados generales -->
+      <div class="flex justify-between items-center pt-2">
+        <button onclick="toggleView('results')" class="text-sm text-indigo-700 font-semibold hover:underline flex items-center gap-1">
+          <i class="fas fa-chart-bar"></i> Ver Tabla de Posiciones y Resultados
+        </button>
+      </div>
+    </section>
+
+    <!-- 3. TABLA DE RESULTADOS Y PROMEDIOS -->
+    <section id="resultsSection" class="hidden space-y-6">
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+        <div>
+          <h2 class="text-xl font-bold text-slate-900">Concentrado General de Calificaciones</h2>
+          <p class="text-xs text-slate-500">Promedio de los 3 jueces por participante</p>
+        </div>
+        <div class="flex gap-2">
+          <button onclick="toggleView('eval')" id="btnBackToEval" class="text-xs bg-slate-200 hover:bg-slate-300 text-slate-800 px-3 py-2 rounded-lg font-medium transition">
+            Volver a Evaluar
+          </button>
+          <button onclick="exportToCSV()" class="text-xs bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2 rounded-lg font-medium transition flex items-center gap-1">
+            <i class="fas fa-file-excel"></i> Descargar Excel (CSV)
+          </button>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-x-auto">
+        <table class="w-full text-left text-sm">
+          <thead class="bg-slate-50 border-b border-slate-200 text-slate-600 uppercase text-[11px] font-semibold">
+            <tr>
+              <th class="p-3">#</th>
+              <th class="p-3">Participante</th>
+              <th class="p-3">Canción</th>
+              <th class="p-3 text-center">Juez 1</th>
+              <th class="p-3 text-center">Juez 2</th>
+              <th class="p-3 text-center">Juez 3</th>
+              <th class="p-3 text-center bg-indigo-50 text-indigo-900">Promedio Final</th>
+            </tr>
+          </thead>
+          <tbody id="resultsTableBody" class="divide-y divide-slate-100">
+            <!-- Dinámico -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    // 1. LISTA OFICIAL DE PARTICIPANTES
+    const participants = [
+      { id: 1, name: "Lozano Alatorre Hanna Paloma", song: "No me queda más" },
+      { id: 2, name: "Garcia Rios Santiago Said", song: "Gotas de Fuego" },
+      { id: 3, name: "Flores Palafox Abril Xiomara", song: "Ex de verdad" },
+      { id: 4, name: "Lage da Silveira Ruy", song: "Difusao Mental" },
+      { id: 5, name: "Altamirano Funes Carlos Antonio", song: "Volver Volver" },
+      { id: 6, name: "Uribe Mendoza Paula Isabel", song: "Recuérdame Bonito" },
+      { id: 7, name: "González Bañuelos Carlos Alberto", song: "Ojos de Videotape" },
+      { id: 8, name: "Hernandez Pablo Asahel", song: "Asi fue" },
+      { id: 9, name: "Orozco Ibarra Jaime Jesus", song: "Asphyxia" },
+      { id: 10, name: "Velazquez Garcia Marcos", song: "Creep" },
+      { id: 11, name: "Herrera García Beatriz Adriana", song: "Los Laureles" }
+    ];
+
+    // 2. CREDENCIALES CONFIGURADAS
+    const USERS = {
+      "juez1": { pass: "talento2026", role: "judge", name: "Juez 1" },
+      "juez2": { pass: "talento2026", role: "judge", name: "Juez 2" },
+      "juez3": { pass: "talento2026", role: "judge", name: "Juez 3" },
+      "admin": { pass: "admin2026", role: "admin", name: "Coordinador: Francisco Cárdenas" }
+    };
+
+    let currentUser = null;
+
+    // Inicializar almacén local
+    function getStoredScores() {
+      const data = localStorage.getItem("talento_scores_2026");
+      return data ? JSON.parse(data) : {};
+    }
+
+    function saveScoresToStorage(scores) {
+      localStorage.setItem("talento_scores_2026", JSON.stringify(scores));
+    }
+
+    // Poblar Selector de Participantes
+    function initParticipantsDropdown() {
+      const select = document.getElementById("participantSelect");
+      select.innerHTML = "";
+      participants.forEach((p, idx) => {
+        const opt = document.createElement("option");
+        opt.value = p.id;
+        opt.textContent = `${idx + 1}. ${p.name} - "${p.song}"`;
+        select.appendChild(opt);
+      });
+    }
+
+    // Manejo de Sesión
+    function login() {
+      const u = document.getElementById("username").value.trim().toLowerCase();
+      const p = document.getElementById("password").value.trim();
+      const err = document.getElementById("loginError");
+
+      if (USERS[u] && USERS[u].pass === p) {
+        currentUser = { id: u, ...USERS[u] };
+        document.getElementById("loginSection").classList.add("hidden");
+        document.getElementById("userBadge").classList.remove("hidden");
+        document.getElementById("judgeNameDisplay").textContent = currentUser.name;
+
+        initParticipantsDropdown();
+
+        if (currentUser.role === "admin") {
+          toggleView("results");
+          document.getElementById("btnBackToEval").classList.add("hidden");
+        } else {
+          toggleView("eval");
+          loadParticipantScore();
+        }
+      } else {
+        err.textContent = "Usuario o contraseña incorrectos.";
+        err.classList.remove("hidden");
+      }
+    }
+
+    function logout() {
+      currentUser = null;
+      document.getElementById("loginSection").classList.remove("hidden");
+      document.getElementById("evalSection").classList.add("hidden");
+      document.getElementById("resultsSection").classList.add("hidden");
+      document.getElementById("userBadge").classList.add("hidden");
+      document.getElementById("username").value = "";
+      document.getElementById("password").value = "";
+    }
+
+    function toggleView(view) {
+      if (view === "results") {
+        document.getElementById("evalSection").classList.add("hidden");
+        document.getElementById("resultsSection").classList.remove("hidden");
+        renderResultsTable();
+      } else {
+        document.getElementById("resultsSection").classList.add("hidden");
+        document.getElementById("evalSection").classList.remove("hidden");
+      }
+    }
+
+    // Sincronización Rúbrica y Cálculos
+    function syncFromNumber(rangeId, val) {
+      document.getElementById(rangeId).value = val;
+      updateRubricTotals();
+    }
+
+    function updateRubricTotals() {
+      const afin = parseInt(document.getElementById("inputAfinacion").value) || 0;
+      const tec = parseInt(document.getElementById("inputTecnica").value) || 0;
+      const interp = parseInt(document.getElementById("inputInterp").value) || 0;
+      const orig = parseInt(document.getElementById("inputOriginalidad").value) || 0;
+
+      document.getElementById("numAfinacion").value = afin;
+      document.getElementById("scoreAfinacionBadge").textContent = afin + " pts";
+
+      document.getElementById("numTecnica").value = tec;
+      document.getElementById("scoreTecnicaBadge").textContent = tec + " pts";
+
+      document.getElementById("numInterp").value = interp;
+      document.getElementById("scoreInterpBadge").textContent = interp + " pts";
+
+      document.getElementById("numOriginalidad").value = orig;
+      document.getElementById("scoreOriginalidadBadge").textContent = orig + " pts";
+
+      const total = afin + tec + interp + orig;
+      document.getElementById("liveTotal").innerHTML = `${total} <span class="text-sm font-normal text-white">/ 100</span>`;
+    }
+
+    function loadParticipantScore() {
+      const pId = document.getElementById("participantSelect").value;
+      const part = participants.find(p => p.id == pId);
+
+      document.getElementById("currentParticipantName").textContent = part.name;
+      document.getElementById("currentParticipantSong").innerHTML = `<i class="fas fa-music"></i> <span>Canción: <b>${part.song}</b></span>`;
+
+      const scores = getStoredScores();
+      const userScores = (scores[currentUser.id] && scores[currentUser.id][pId]) ? scores[currentUser.id][pId] : null;
+
+      if (userScores) {
+        document.getElementById("inputAfinacion").value = userScores.afinacion;
+        document.getElementById("inputTecnica").value = userScores.tecnica;
+        document.getElementById("inputInterp").value = userScores.interp;
+        document.getElementById("inputOriginalidad").value = userScores.originalidad;
+        document.getElementById("feedbackText").value = userScores.notes || "";
+      } else {
+        document.getElementById("inputAfinacion").value = 0;
+        document.getElementById("inputTecnica").value = 0;
+        document.getElementById("inputInterp").value = 0;
+        document.getElementById("inputOriginalidad").value = 0;
+        document.getElementById("feedbackText").value = "";
+      }
+      updateRubricTotals();
+      document.getElementById("saveConfirmMsg").classList.add("hidden");
+    }
+
+    function saveCurrentScore() {
+      const pId = document.getElementById("participantSelect").value;
+      const scores = getStoredScores();
+
+      if (!scores[currentUser.id]) scores[currentUser.id] = {};
+
+      const afin = parseInt(document.getElementById("inputAfinacion").value) || 0;
+      const tec = parseInt(document.getElementById("inputTecnica").value) || 0;
+      const interp = parseInt(document.getElementById("inputInterp").value) || 0;
+      const orig = parseInt(document.getElementById("inputOriginalidad").value) || 0;
+      const total = afin + tec + interp + orig;
+
+      scores[currentUser.id][pId] = {
+        afinacion: afin,
+        tecnica: tec,
+        interp: interp,
+        originalidad: orig,
+        total: total,
+        notes: document.getElementById("feedbackText").value.trim()
+      };
+
+      saveScoresToStorage(scores);
+
+      const msg = document.getElementById("saveConfirmMsg");
+      msg.classList.remove("hidden");
+      setTimeout(() => msg.classList.add("hidden"), 2500);
+    }
+
+    // Generar Tabla de Posiciones
+    function renderResultsTable() {
+      const scores = getStoredScores();
+      const tbody = document.getElementById("resultsTableBody");
+      tbody.innerHTML = "";
+
+      const rowsData = participants.map((p, index) => {
+        const j1 = scores["juez1"] && scores["juez1"][p.id] ? scores["juez1"][p.id].total : null;
+        const j2 = scores["juez2"] && scores["juez2"][p.id] ? scores["juez2"][p.id].total : null;
+        const j3 = scores["juez3"] && scores["juez3"][p.id] ? scores["juez3"][p.id].total : null;
+
+        const evaluated = [j1, j2, j3].filter(v => v !== null);
+        const avg = evaluated.length > 0 ? (evaluated.reduce((a, b) => a + b, 0) / evaluated.length).toFixed(1) : "-";
+
+        return { id: p.id, index: index + 1, name: p.name, song: p.song, j1: j1 ?? "-", j2: j2 ?? "-", j3: j3 ?? "-", avg: avg };
+      });
+
+      // Ordenar por promedio desc
+      rowsData.sort((a, b) => {
+        const valA = a.avg === "-" ? -1 : parseFloat(a.avg);
+        const valB = b.avg === "-" ? -1 : parseFloat(b.avg);
+        return valB - valA;
+      });
+
+      rowsData.forEach((row, i) => {
+        const tr = document.createElement("tr");
+        tr.className = "hover:bg-slate-50";
+        tr.innerHTML = `
+          <td class="p-3 font-bold text-slate-500">${i + 1}</td>
+          <td class="p-3 font-semibold text-slate-900">${row.name}</td>
+          <td class="p-3 text-slate-600 italic">${row.song}</td>
+          <td class="p-3 text-center text-slate-700 font-medium">${row.j1}</td>
+          <td class="p-3 text-center text-slate-700 font-medium">${row.j2}</td>
+          <td class="p-3 text-center text-slate-700 font-medium">${row.j3}</td>
+          <td class="p-3 text-center font-extrabold text-indigo-700 bg-indigo-50/50">${row.avg}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Exportar Resultados a Excel / CSV
+    function exportToCSV() {
+      const scores = getStoredScores();
+      let csv = "Lugar,Nombre,Cancion,Juez 1,Juez 2,Juez 3,Promedio\n";
+
+      const rowsData = participants.map((p, index) => {
+        const j1 = scores["juez1"] && scores["juez1"][p.id] ? scores["juez1"][p.id].total : "";
+        const j2 = scores["juez2"] && scores["juez2"][p.id] ? scores["juez2"][p.id].total : "";
+        const j3 = scores["juez3"] && scores["juez3"][p.id] ? scores["juez3"][p.id].total : "";
+        const evaluated = [j1, j2, j3].filter(v => v !== "");
+        const avg = evaluated.length > 0 ? (evaluated.reduce((a, b) => a + b, 0) / evaluated.length).toFixed(2) : "";
+        return { name: p.name, song: p.song, j1, j2, j3, avg };
+      });
+
+      rowsData.sort((a, b) => (parseFloat(b.avg) || 0) - (parseFloat(a.avg) || 0));
+
+      rowsData.forEach((r, idx) => {
+        csv += `"${idx + 1}","${r.name}","${r.song}","${r.j1}","${r.j2}","${r.j3}","${r.avg}"\n`;
+      });
+
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `Resultados_FEYRI_Talento_2026.csv`;
+      a.click();
+    }
+  </script>
+</body>
+</html>
+
