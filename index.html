@@ -9,16 +9,13 @@
 </head>
 <body class="bg-slate-100 min-h-screen text-slate-800 font-sans">
 
-  <!-- ENCABEZADO -->
-  <header class="bg-indigo-900 text-white shadow-md">
-    <div class="max-w-5xl mx-auto px-4 py-4 flex justify-between items-center">
-      <div>
-        <h1 class="text-xl font-bold tracking-wide">FEYRI TIENE TALENTO</h1>
-        <p class="text-xs text-indigo-200">Panel Oficial de Evaluación de Jurado</p>
-      </div>
-      <div id="userBadge" class="hidden flex items-center gap-3">
-        <span id="judgeNameDisplay" class="bg-indigo-800 text-xs px-3 py-1.5 rounded-full border border-indigo-700 font-semibold"></span>
-        <button onclick="logout()" class="text-xs bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded-lg transition">Salir</button>
+  <!-- ENCABEZADO CENTRADO EN TONO VERDE -->
+  <header class="bg-emerald-800 text-white shadow-md sticky top-0 z-50">
+    <div class="max-w-5xl mx-auto px-4 py-4 relative flex items-center justify-center">
+      <h1 class="text-xl md:text-2xl font-black tracking-wide text-center uppercase">FEYRI TIENE TALENTO</h1>
+      <div id="userBadge" class="hidden absolute right-4 flex items-center gap-2">
+        <span id="judgeNameDisplay" class="bg-emerald-950/60 text-xs px-3 py-1.5 rounded-full border border-emerald-600/50 font-semibold"></span>
+        <button onclick="logout()" class="text-xs bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded-lg transition font-medium">Salir</button>
       </div>
     </div>
   </header>
@@ -26,9 +23,9 @@
   <main class="max-w-5xl mx-auto px-4 py-6">
 
     <!-- 1. PANTALLA DE LOGIN -->
-    <section id="loginSection" class="max-w-md mx-auto mt-12 bg-white p-8 rounded-2xl shadow-lg border border-slate-200">
+    <section id="loginSection" class="max-w-md mx-auto mt-10 bg-white p-8 rounded-2xl shadow-lg border border-slate-200">
       <div class="text-center mb-6">
-        <div class="inline-flex p-3 bg-indigo-100 text-indigo-700 rounded-full mb-3 text-2xl">
+        <div class="inline-flex p-3 bg-emerald-100 text-emerald-800 rounded-full mb-3 text-2xl">
           <i class="fas fa-gavel"></i>
         </div>
         <h2 class="text-xl font-bold text-slate-900">Acceso de Jueces</h2>
@@ -37,140 +34,136 @@
       <div class="space-y-4">
         <div>
           <label class="block text-xs font-semibold uppercase text-slate-600 mb-1">Usuario</label>
-          <input type="text" id="username" placeholder="Ej: juez1" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
+          <input type="text" id="username" placeholder="Ingresa tu usuario" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-600 text-sm">
         </div>
         <div>
           <label class="block text-xs font-semibold uppercase text-slate-600 mb-1">Contraseña</label>
-          <input type="password" id="password" placeholder="••••••••" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
+          <input type="password" id="password" placeholder="••••••••" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-600 text-sm">
         </div>
-        <button onclick="login()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 rounded-lg shadow transition text-sm">
+        <button onclick="login()" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-semibold py-2.5 rounded-lg shadow transition text-sm">
           Iniciar Sesión
         </button>
         <div id="loginError" class="hidden text-xs text-red-600 bg-red-50 p-2.5 rounded border border-red-200 text-center"></div>
-      </div>
-      <div class="mt-6 pt-4 border-t border-slate-100 text-[11px] text-slate-400 text-center">
-        Cuentas: <b>juez1</b>, <b>juez2</b>, <b>juez3</b> (Clave: <i>talento2026</i>) | Admin: <b>admin</b> (Clave: <i>admin2026</i>)
       </div>
     </section>
 
     <!-- 2. PANEL DEL JUEZ -->
     <section id="evalSection" class="hidden space-y-6">
 
-      <!-- Barra de Configuración: Categoría y Participante -->
+      <!-- Selector de Categoría y Participante -->
       <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Categoría</label>
-          <select id="categorySelect" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-sm font-medium focus:ring-2 focus:ring-indigo-500">
+          <select id="categorySelect" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-sm font-medium focus:ring-2 focus:ring-emerald-600">
             <option value="Canto 1">Categoría: Canto 1</option>
           </select>
         </div>
         <div>
           <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Seleccionar Participante</label>
-          <select id="participantSelect" onchange="loadParticipantScore()" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-sm font-semibold text-indigo-900 focus:ring-2 focus:ring-indigo-500">
-            <!-- Se llena dinámicamente -->
+          <select id="participantSelect" onchange="loadParticipantScore()" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-sm font-semibold text-emerald-950 focus:ring-2 focus:ring-emerald-600">
           </select>
         </div>
       </div>
 
       <!-- Tarjeta del Participante Activo -->
-      <div class="bg-gradient-to-r from-indigo-700 to-blue-600 text-white p-5 rounded-xl shadow flex flex-col sm:flex-row justify-between sm:items-center gap-3">
+      <div class="bg-gradient-to-r from-emerald-800 to-green-700 text-white p-5 rounded-xl shadow flex flex-col sm:flex-row justify-between sm:items-center gap-3">
         <div>
-          <span class="text-xs uppercase tracking-wider bg-white/20 px-2 py-0.5 rounded font-semibold">En Escenario</span>
-          <h3 id="currentParticipantName" class="text-xl font-bold mt-1"></h3>
-          <p id="currentParticipantSong" class="text-sm text-indigo-100 flex items-center gap-2 mt-0.5">
+          <span class="text-xs uppercase tracking-wider bg-white/20 px-2.5 py-0.5 rounded-full font-semibold">En Escenario</span>
+          <h3 id="currentParticipantName" class="text-xl font-bold mt-1.5"></h3>
+          <p id="currentParticipantSong" class="text-sm text-emerald-100 flex items-center gap-2 mt-0.5">
             <i class="fas fa-music"></i> <span></span>
           </p>
         </div>
-        <div class="text-right bg-white/10 p-3 rounded-lg border border-white/10 self-start sm:self-auto">
-          <div class="text-xs uppercase text-indigo-200">Total Acumulado</div>
+        <div class="text-right bg-black/15 p-3 rounded-lg border border-white/10 self-start sm:self-auto">
+          <div class="text-xs uppercase text-emerald-200 font-semibold">Total Calificación</div>
           <div id="liveTotal" class="text-3xl font-extrabold text-amber-300">0 <span class="text-sm font-normal text-white">/ 100</span></div>
         </div>
       </div>
 
-      <!-- Formulario de Rúbrica -->
+      <!-- Formulario de la Rúbrica -->
       <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 space-y-6">
 
-        <!-- Criterio 1: Afinación (40 pts) -->
+        <!-- 1. Afinación (40 pts) -->
         <div class="border-b border-slate-100 pb-5">
           <div class="flex justify-between items-center mb-1">
             <h4 class="font-bold text-slate-800 text-sm md:text-base">1. Afinación (Máx. 40 Pts)</h4>
-            <span id="scoreAfinacionBadge" class="text-sm font-extrabold px-3 py-1 bg-indigo-50 text-indigo-700 rounded-full border border-indigo-200">0 pts</span>
+            <span id="scoreAfinacionBadge" class="text-sm font-extrabold px-3 py-1 bg-emerald-50 text-emerald-800 rounded-full border border-emerald-200">0 pts</span>
           </div>
           <p class="text-xs text-slate-500 mb-3">
             <b>36-40:</b> Excelente | <b>31-35:</b> Buena | <b>21-30:</b> Aceptable | <b>11-20:</b> Inconsistente | <b>0-10:</b> Pobre
           </p>
           <div class="flex items-center gap-4">
-            <input type="range" id="inputAfinacion" min="0" max="40" value="0" oninput="updateRubricTotals()" class="w-full accent-indigo-600 cursor-pointer">
+            <input type="range" id="inputAfinacion" min="0" max="40" value="0" oninput="updateRubricTotals()" class="w-full accent-emerald-700 cursor-pointer">
             <input type="number" id="numAfinacion" min="0" max="40" value="0" oninput="syncFromNumber('inputAfinacion', this.value)" class="w-16 text-center border border-slate-300 rounded p-1 text-sm font-semibold">
           </div>
         </div>
 
-        <!-- Criterio 2: Técnica Vocal (30 pts) -->
+        <!-- 2. Técnica Vocal (30 pts) -->
         <div class="border-b border-slate-100 pb-5">
           <div class="flex justify-between items-center mb-1">
             <h4 class="font-bold text-slate-800 text-sm md:text-base">2. Técnica Vocal (Máx. 30 Pts)</h4>
-            <span id="scoreTecnicaBadge" class="text-sm font-extrabold px-3 py-1 bg-indigo-50 text-indigo-700 rounded-full border border-indigo-200">0 pts</span>
+            <span id="scoreTecnicaBadge" class="text-sm font-extrabold px-3 py-1 bg-emerald-50 text-emerald-800 rounded-full border border-emerald-200">0 pts</span>
           </div>
           <p class="text-xs text-slate-500 mb-3">
             <b>26-30:</b> Excelente | <b>21-25:</b> Buena | <b>11-20:</b> Aceptable | <b>0-10:</b> Deficiente
           </p>
           <div class="flex items-center gap-4">
-            <input type="range" id="inputTecnica" min="0" max="30" value="0" oninput="updateRubricTotals()" class="w-full accent-indigo-600 cursor-pointer">
+            <input type="range" id="inputTecnica" min="0" max="30" value="0" oninput="updateRubricTotals()" class="w-full accent-emerald-700 cursor-pointer">
             <input type="number" id="numTecnica" min="0" max="30" value="0" oninput="syncFromNumber('inputTecnica', this.value)" class="w-16 text-center border border-slate-300 rounded p-1 text-sm font-semibold">
           </div>
         </div>
 
-        <!-- Criterio 3: Interpretación y Presencia Escénica (20 pts) -->
+        <!-- 3. Interpretación y Presencia Escénica (20 pts) -->
         <div class="border-b border-slate-100 pb-5">
           <div class="flex justify-between items-center mb-1">
             <h4 class="font-bold text-slate-800 text-sm md:text-base">3. Interpretación y Presencia Escénica (Máx. 20 Pts)</h4>
-            <span id="scoreInterpBadge" class="text-sm font-extrabold px-3 py-1 bg-indigo-50 text-indigo-700 rounded-full border border-indigo-200">0 pts</span>
+            <span id="scoreInterpBadge" class="text-sm font-extrabold px-3 py-1 bg-emerald-50 text-emerald-800 rounded-full border border-emerald-200">0 pts</span>
           </div>
           <p class="text-xs text-slate-500 mb-3">
             <b>16-20:</b> Emocional y convincente | <b>11-15:</b> Adecuada | <b>6-10:</b> Aceptable | <b>0-5:</b> Débil
           </p>
           <div class="flex items-center gap-4">
-            <input type="range" id="inputInterp" min="0" max="20" value="0" oninput="updateRubricTotals()" class="w-full accent-indigo-600 cursor-pointer">
+            <input type="range" id="inputInterp" min="0" max="20" value="0" oninput="updateRubricTotals()" class="w-full accent-emerald-700 cursor-pointer">
             <input type="number" id="numInterp" min="0" max="20" value="0" oninput="syncFromNumber('inputInterp', this.value)" class="w-16 text-center border border-slate-300 rounded p-1 text-sm font-semibold">
           </div>
         </div>
 
-        <!-- Criterio 4: Originalidad (10 pts) -->
+        <!-- 4. Originalidad (10 pts) -->
         <div>
           <div class="flex justify-between items-center mb-1">
             <h4 class="font-bold text-slate-800 text-sm md:text-base">4. Originalidad (Máx. 10 Pts)</h4>
-            <span id="scoreOriginalidadBadge" class="text-sm font-extrabold px-3 py-1 bg-indigo-50 text-indigo-700 rounded-full border border-indigo-200">0 pts</span>
+            <span id="scoreOriginalidadBadge" class="text-sm font-extrabold px-3 py-1 bg-emerald-50 text-emerald-800 rounded-full border border-emerald-200">0 pts</span>
           </div>
           <p class="text-xs text-slate-500 mb-3">
             <b>8-10:</b> Original y única | <b>5-7:</b> Aspectos innovadores | <b>0-4:</b> Predecible
           </p>
           <div class="flex items-center gap-4">
-            <input type="range" id="inputOriginalidad" min="0" max="10" value="0" oninput="updateRubricTotals()" class="w-full accent-indigo-600 cursor-pointer">
+            <input type="range" id="inputOriginalidad" min="0" max="10" value="0" oninput="updateRubricTotals()" class="w-full accent-emerald-700 cursor-pointer">
             <input type="number" id="numOriginalidad" min="0" max="10" value="0" oninput="syncFromNumber('inputOriginalidad', this.value)" class="w-16 text-center border border-slate-300 rounded p-1 text-sm font-semibold">
           </div>
         </div>
 
-        <!-- Retroalimentación / Notas -->
+        <!-- Observaciones -->
         <div class="pt-2">
           <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Observaciones / Comentarios</label>
-          <textarea id="feedbackText" rows="2" placeholder="Opcional: Comentarios para el participante..." class="w-full p-2.5 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500"></textarea>
+          <textarea id="feedbackText" rows="2" placeholder="Opcional: Comentarios para el participante..." class="w-full p-2.5 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-600"></textarea>
         </div>
 
         <!-- Botón Guardar -->
         <div class="pt-2 flex gap-3">
-          <button onclick="saveCurrentScore()" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-lg shadow-md transition flex justify-center items-center gap-2">
+          <button onclick="saveCurrentScore()" class="flex-1 bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-3 rounded-lg shadow-md transition flex justify-center items-center gap-2">
             <i class="fas fa-check-circle"></i> Guardar Calificación
           </button>
         </div>
-        <div id="saveConfirmMsg" class="hidden text-center text-xs font-semibold text-emerald-700 bg-emerald-50 p-2 rounded border border-emerald-200">
+        <div id="saveConfirmMsg" class="hidden text-center text-xs font-semibold text-emerald-800 bg-emerald-50 p-2.5 rounded border border-emerald-200">
           ¡Calificación guardada con éxito!
         </div>
       </div>
 
-      <!-- Barra de navegación a resultados generales -->
+      <!-- Navegación a resultados -->
       <div class="flex justify-between items-center pt-2">
-        <button onclick="toggleView('results')" class="text-sm text-indigo-700 font-semibold hover:underline flex items-center gap-1">
-          <i class="fas fa-chart-bar"></i> Ver Tabla de Posiciones y Resultados
+        <button onclick="toggleView('results')" class="text-sm text-emerald-800 font-semibold hover:underline flex items-center gap-1.5">
+          <i class="fas fa-chart-bar"></i> Ver Concentrado de Posiciones y Resultados
         </button>
       </div>
     </section>
@@ -180,13 +173,13 @@
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
         <div>
           <h2 class="text-xl font-bold text-slate-900">Concentrado General de Calificaciones</h2>
-          <p class="text-xs text-slate-500">Promedio de los 3 jueces por participante</p>
+          <p class="text-xs text-slate-500">Promedios en tiempo real del jurado evaluador</p>
         </div>
         <div class="flex gap-2">
           <button onclick="toggleView('eval')" id="btnBackToEval" class="text-xs bg-slate-200 hover:bg-slate-300 text-slate-800 px-3 py-2 rounded-lg font-medium transition">
             Volver a Evaluar
           </button>
-          <button onclick="exportToCSV()" class="text-xs bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2 rounded-lg font-medium transition flex items-center gap-1">
+          <button onclick="exportToCSV()" class="text-xs bg-emerald-700 hover:bg-emerald-800 text-white px-3 py-2 rounded-lg font-medium transition flex items-center gap-1.5">
             <i class="fas fa-file-excel"></i> Descargar Excel (CSV)
           </button>
         </div>
@@ -202,11 +195,10 @@
               <th class="p-3 text-center">Juez 1</th>
               <th class="p-3 text-center">Juez 2</th>
               <th class="p-3 text-center">Juez 3</th>
-              <th class="p-3 text-center bg-indigo-50 text-indigo-900">Promedio Final</th>
+              <th class="p-3 text-center bg-emerald-50 text-emerald-950 font-bold">Promedio Final</th>
             </tr>
           </thead>
           <tbody id="resultsTableBody" class="divide-y divide-slate-100">
-            <!-- Dinámico -->
           </tbody>
         </table>
       </div>
@@ -215,7 +207,6 @@
   </main>
 
   <script>
-    // 1. LISTA OFICIAL DE PARTICIPANTES
     const participants = [
       { id: 1, name: "Lozano Alatorre Hanna Paloma", song: "No me queda más" },
       { id: 2, name: "Garcia Rios Santiago Said", song: "Gotas de Fuego" },
@@ -230,7 +221,6 @@
       { id: 11, name: "Herrera García Beatriz Adriana", song: "Los Laureles" }
     ];
 
-    // 2. CREDENCIALES CONFIGURADAS
     const USERS = {
       "juez1": { pass: "talento2026", role: "judge", name: "Juez 1" },
       "juez2": { pass: "talento2026", role: "judge", name: "Juez 2" },
@@ -240,7 +230,6 @@
 
     let currentUser = null;
 
-    // Inicializar almacén local
     function getStoredScores() {
       const data = localStorage.getItem("talento_scores_2026");
       return data ? JSON.parse(data) : {};
@@ -250,7 +239,6 @@
       localStorage.setItem("talento_scores_2026", JSON.stringify(scores));
     }
 
-    // Poblar Selector de Participantes
     function initParticipantsDropdown() {
       const select = document.getElementById("participantSelect");
       select.innerHTML = "";
@@ -262,7 +250,6 @@
       });
     }
 
-    // Manejo de Sesión
     function login() {
       const u = document.getElementById("username").value.trim().toLowerCase();
       const p = document.getElementById("password").value.trim();
@@ -310,7 +297,6 @@
       }
     }
 
-    // Sincronización Rúbrica y Cálculos
     function syncFromNumber(rangeId, val) {
       document.getElementById(rangeId).value = val;
       updateRubricTotals();
@@ -393,7 +379,6 @@
       setTimeout(() => msg.classList.add("hidden"), 2500);
     }
 
-    // Generar Tabla de Posiciones
     function renderResultsTable() {
       const scores = getStoredScores();
       const tbody = document.getElementById("resultsTableBody");
@@ -410,7 +395,6 @@
         return { id: p.id, index: index + 1, name: p.name, song: p.song, j1: j1 ?? "-", j2: j2 ?? "-", j3: j3 ?? "-", avg: avg };
       });
 
-      // Ordenar por promedio desc
       rowsData.sort((a, b) => {
         const valA = a.avg === "-" ? -1 : parseFloat(a.avg);
         const valB = b.avg === "-" ? -1 : parseFloat(b.avg);
@@ -427,13 +411,12 @@
           <td class="p-3 text-center text-slate-700 font-medium">${row.j1}</td>
           <td class="p-3 text-center text-slate-700 font-medium">${row.j2}</td>
           <td class="p-3 text-center text-slate-700 font-medium">${row.j3}</td>
-          <td class="p-3 text-center font-extrabold text-indigo-700 bg-indigo-50/50">${row.avg}</td>
+          <td class="p-3 text-center font-extrabold text-emerald-800 bg-emerald-50/70">${row.avg}</td>
         `;
         tbody.appendChild(tr);
       });
     }
 
-    // Exportar Resultados a Excel / CSV
     function exportToCSV() {
       const scores = getStoredScores();
       let csv = "Lugar,Nombre,Cancion,Juez 1,Juez 2,Juez 3,Promedio\n";
