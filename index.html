@@ -97,66 +97,66 @@
         </div>
       </div>
 
-      <!-- Formulario de Rúbrica Oficial -->
+      <!-- Formulario de Rúbrica (25 pts cada criterio) -->
       <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 space-y-6">
 
-        <!-- 1. Afinación (40 pts) -->
+        <!-- 1. Afinación (25 pts) -->
         <div class="border-b border-slate-100 pb-5">
           <div class="flex justify-between items-center mb-1">
-            <h4 class="font-bold text-slate-800 text-sm md:text-base">1. Afinación (Máx. 40 Pts)</h4>
+            <h4 class="font-bold text-slate-800 text-sm md:text-base">1. Afinación (Máx. 25 Pts)</h4>
             <span id="scoreAfinacionBadge" class="text-sm font-extrabold px-3 py-1 bg-emerald-50 text-[#064e3b] rounded-full border border-emerald-200">0 pts</span>
           </div>
           <p class="text-xs text-slate-500 mb-3">
-            <b>36-40:</b> Excelente | <b>31-35:</b> Buena | <b>21-30:</b> Aceptable | <b>11-20:</b> Inconsistente | <b>0-10:</b> Pobre
+            <b>22-25:</b> Excelente | <b>18-21:</b> Buena | <b>12-17:</b> Aceptable | <b>7-11:</b> Inconsistente | <b>0-6:</b> Pobre
           </p>
           <div class="flex items-center gap-4">
-            <input type="range" id="inputAfinacion" min="0" max="40" value="0" oninput="updateRubricTotals()" class="w-full accent-[#064e3b] cursor-pointer">
-            <input type="number" id="numAfinacion" min="0" max="40" value="0" oninput="syncFromNumber('inputAfinacion', this.value)" class="w-16 text-center border border-slate-300 rounded p-1 text-sm font-semibold">
+            <input type="range" id="inputAfinacion" min="0" max="25" value="0" oninput="updateRubricTotals()" class="w-full accent-[#064e3b] cursor-pointer">
+            <input type="number" id="numAfinacion" min="0" max="25" value="0" oninput="syncFromNumber('inputAfinacion', this.value)" class="w-16 text-center border border-slate-300 rounded p-1 text-sm font-semibold">
           </div>
         </div>
 
-        <!-- 2. Técnica Vocal (30 pts) -->
+        <!-- 2. Técnica Vocal (25 pts) -->
         <div class="border-b border-slate-100 pb-5">
           <div class="flex justify-between items-center mb-1">
-            <h4 class="font-bold text-slate-800 text-sm md:text-base">2. Técnica Vocal (Máx. 30 Pts)</h4>
+            <h4 class="font-bold text-slate-800 text-sm md:text-base">2. Técnica Vocal (Máx. 25 Pts)</h4>
             <span id="scoreTecnicaBadge" class="text-sm font-extrabold px-3 py-1 bg-emerald-50 text-[#064e3b] rounded-full border border-emerald-200">0 pts</span>
           </div>
           <p class="text-xs text-slate-500 mb-3">
-            <b>26-30:</b> Excelente | <b>21-25:</b> Buena | <b>11-20:</b> Aceptable | <b>0-10:</b> Deficiente
+            <b>22-25:</b> Excelente | <b>18-21:</b> Buena | <b>10-17:</b> Aceptable | <b>0-9:</b> Deficiente
           </p>
           <div class="flex items-center gap-4">
-            <input type="range" id="inputTecnica" min="0" max="30" value="0" oninput="updateRubricTotals()" class="w-full accent-[#064e3b] cursor-pointer">
-            <input type="number" id="numTecnica" min="0" max="30" value="0" oninput="syncFromNumber('inputTecnica', this.value)" class="w-16 text-center border border-slate-300 rounded p-1 text-sm font-semibold">
+            <input type="range" id="inputTecnica" min="0" max="25" value="0" oninput="updateRubricTotals()" class="w-full accent-[#064e3b] cursor-pointer">
+            <input type="number" id="numTecnica" min="0" max="25" value="0" oninput="syncFromNumber('inputTecnica', this.value)" class="w-16 text-center border border-slate-300 rounded p-1 text-sm font-semibold">
           </div>
         </div>
 
-        <!-- 3. Interpretación y Presencia Escénica (20 pts) -->
+        <!-- 3. Interpretación y Presencia Escénica (25 pts) -->
         <div class="border-b border-slate-100 pb-5">
           <div class="flex justify-between items-center mb-1">
-            <h4 class="font-bold text-slate-800 text-sm md:text-base">3. Interpretación y Presencia Escénica (Máx. 20 Pts)</h4>
+            <h4 class="font-bold text-slate-800 text-sm md:text-base">3. Interpretación y Presencia Escénica (Máx. 25 Pts)</h4>
             <span id="scoreInterpBadge" class="text-sm font-extrabold px-3 py-1 bg-emerald-50 text-[#064e3b] rounded-full border border-emerald-200">0 pts</span>
           </div>
           <p class="text-xs text-slate-500 mb-3">
-            <b>16-20:</b> Emocional y convincente | <b>11-15:</b> Adecuada | <b>6-10:</b> Aceptable | <b>0-5:</b> Débil
+            <b>21-25:</b> Emocional y convincente | <b>15-20:</b> Adecuada | <b>8-14:</b> Aceptable | <b>0-7:</b> Débil
           </p>
           <div class="flex items-center gap-4">
-            <input type="range" id="inputInterp" min="0" max="20" value="0" oninput="updateRubricTotals()" class="w-full accent-[#064e3b] cursor-pointer">
-            <input type="number" id="numInterp" min="0" max="20" value="0" oninput="syncFromNumber('inputInterp', this.value)" class="w-16 text-center border border-slate-300 rounded p-1 text-sm font-semibold">
+            <input type="range" id="inputInterp" min="0" max="25" value="0" oninput="updateRubricTotals()" class="w-full accent-[#064e3b] cursor-pointer">
+            <input type="number" id="numInterp" min="0" max="25" value="0" oninput="syncFromNumber('inputInterp', this.value)" class="w-16 text-center border border-slate-300 rounded p-1 text-sm font-semibold">
           </div>
         </div>
 
-        <!-- 4. Originalidad (10 pts) -->
+        <!-- 4. Originalidad (25 pts) -->
         <div>
           <div class="flex justify-between items-center mb-1">
-            <h4 class="font-bold text-slate-800 text-sm md:text-base">4. Originalidad (Máx. 10 Pts)</h4>
+            <h4 class="font-bold text-slate-800 text-sm md:text-base">4. Originalidad (Máx. 25 Pts)</h4>
             <span id="scoreOriginalidadBadge" class="text-sm font-extrabold px-3 py-1 bg-emerald-50 text-[#064e3b] rounded-full border border-emerald-200">0 pts</span>
           </div>
           <p class="text-xs text-slate-500 mb-3">
-            <b>8-10:</b> Original y única | <b>5-7:</b> Aspectos innovadores | <b>0-4:</b> Predecible
+            <b>21-25:</b> Original y única | <b>13-20:</b> Aspectos innovadores | <b>0-12:</b> Predecible
           </p>
           <div class="flex items-center gap-4">
-            <input type="range" id="inputOriginalidad" min="0" max="10" value="0" oninput="updateRubricTotals()" class="w-full accent-[#064e3b] cursor-pointer">
-            <input type="number" id="numOriginalidad" min="0" max="10" value="0" oninput="syncFromNumber('inputOriginalidad', this.value)" class="w-16 text-center border border-slate-300 rounded p-1 text-sm font-semibold">
+            <input type="range" id="inputOriginalidad" min="0" max="25" value="0" oninput="updateRubricTotals()" class="w-full accent-[#064e3b] cursor-pointer">
+            <input type="number" id="numOriginalidad" min="0" max="25" value="0" oninput="syncFromNumber('inputOriginalidad', this.value)" class="w-16 text-center border border-slate-300 rounded p-1 text-sm font-semibold">
           </div>
         </div>
 
@@ -239,7 +239,7 @@
       { id: 11, name: "Herrera García Beatriz Adriana", song: "Los Laureles" }
     ];
 
-    // Cuentas con clave 'feyri26' y nombre directo
+    // Cuentas con clave 'feyri26'
     const USERS = {
       "juez1": { pass: "feyri26", role: "judge", name: "Juez 1" },
       "juez2": { pass: "feyri26", role: "judge", name: "Juez 2" },
